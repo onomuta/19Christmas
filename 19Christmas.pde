@@ -11,18 +11,19 @@ float[] snowXS = new float[snow_num];
 float[] snowYS = new float[snow_num];
 float[] snowS = new float[snow_num];
 
-
+int duration = 20;
 int imgNum = 11;
 PImage[] imgs = new PImage[imgNum];
 
 void setup() {
   //size(640, 360, OPENGL);
-  size(1280, 720, OPENGL);
-  //fullScreen(OPENGL);
+  //size(1280, 720, OPENGL);
+  fullScreen(OPENGL);
+  noCursor();
   strokeCap(ROUND);
   colorMode(HSB, 360, 100, 100, 100);
   rectMode(CENTER);
-  //frameRate(1);
+  frameRate(1);
   
   for (int i = 0; i < imgNum; i++) {
     imgs[i] = loadImage("img" + i+".png");
@@ -33,9 +34,15 @@ void setup() {
 
 int seed = 0;
 void draw() {
-  randomSeed(seed);
+  //seed = int(frameCount/duration);
+  //randomSeed(seed);
   //randomSeed(int(frameCount / 8 / (height / 9) / 4));
-  drawCells();
+  
+  if(frameCount % duration == 0){
+    drawCells();
+  }
+
+  
   // background(200);  
   //print(mouseX);
 }
