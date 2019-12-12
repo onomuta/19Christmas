@@ -1,7 +1,8 @@
 import processing.opengl.*;
-
-color[] pallete = {#f64231, #f64231, #a8c8b9, #f64231, #a8c8b9};
-int sw = 4;
+//color[] pallete = {#f64231, #f64231, #a8c8b9, #f64231, #a8c8b9};
+//color[] pallete = {#f64231,#f64231, #a8c8b9,#f64231, #a8c8b9,#efe7d5};
+color[] pallete = {#f64231,#f64231, #a8c8b9,#f64231, #a8c8b9};
+int sw = 8;
 int snow_num = 30;
 
 float[] snowX = new float[snow_num];
@@ -10,26 +11,38 @@ float[] snowXS = new float[snow_num];
 float[] snowYS = new float[snow_num];
 float[] snowS = new float[snow_num];
 
+
+int imgNum = 11;
+PImage[] imgs = new PImage[imgNum];
+
 void setup() {
   //size(640, 360, OPENGL);
-  //size(1280, 720, OPENGL);
-  fullScreen(OPENGL);
-
+  size(1280, 720, OPENGL);
+  //fullScreen(OPENGL);
+  strokeCap(ROUND);
   colorMode(HSB, 360, 100, 100, 100);
   rectMode(CENTER);
-  frameRate(0.1);
+  //frameRate(1);
+  
+  for (int i = 0; i < imgNum; i++) {
+    imgs[i] = loadImage("img" + i+".png");
+  }
+  
 
-  //setupSnow();
 }
 
+int seed = 0;
 void draw() {
+  randomSeed(seed);
   //randomSeed(int(frameCount / 8 / (height / 9) / 4));
   drawCells();
-  // background(200);
-  //drawSnow();
-  
+  // background(200);  
+  //print(mouseX);
 }
 
+void mouseClicked(){
+  seed ++;
+}
 
 
 void setupSnow() {
@@ -70,12 +83,10 @@ void drawSnow() {
 void drawCells() {
 
   //int step_num = 16;
-  int step_num = 32;
+  translate(0,-height/9);
+  int step_num = 16;
   float step = width / step_num;
 
-  pushMatrix();
-  translate(0, frameCount / 8 % (height / 9 * 4) - (height / 9 * 4));
- 
   boolean[][] cells = new boolean[step_num][step_num];
   for (int j = 0; j < step_num; j++) {
     for (int i = 0; i < step_num; i++) {
@@ -110,20 +121,38 @@ void drawCells() {
           int n = int(random(1000) + i + j * step_num) % pallete.length;
           fill(pallete[n]);
           stroke(#efe7d5);
+          //stroke(#000000);
           strokeWeight(sw);
 
           pushMatrix();
           translate(x + wc / 2, y + hc / 2);
           rect(0, 0, wc, hc);
-          // circle(0,0,20);
+          
+          
+          int cn = int(random(1000) + i + j * step_num);
+          //if(cn % 4 == 0){
+          //  snow();
+          //}else if(cn % 4 == 1){
+          //  star(0, 0, 18); 
+          //}else if(cn % 4 == 2){
+          //  circle(0,0,20);
+          //}else if(cn % 4 == 3){
+          //}
+          //fill(#ffffff);
+          //rect(0,0,cellSize*4,cellSize*4);
+          //text(cellSize,0,0);
+          
+          if(cellSize > 1){
+            image(imgs[cn%imgNum], -60, -60);
+          }else{
 
-          line(-10, 0, 10, 0);
-          rotate(radians(60));
-          line(-10, 0, 10, 0);
-          rotate(radians(60));
-          line(-10, 0, 10, 0);
+          }
+          
+          
+
           popMatrix();
 
+          
           for (int l = j; l < j + cellSize; l++) {
             for (int k = i; k < i + cellSize; k++) {
               int l_ = constrain(l, 0, step_num - 1);
@@ -135,5 +164,35 @@ void drawCells() {
       }
     }
   }
-  popMatrix();
+}
+
+
+
+
+
+
+void star(float x, float y, float radius) {
+  float angle = TWO_PI / 5;
+  float halfAngle = angle/2.0;
+  stroke(#efe7d5);
+  rotate(radians(55));
+  beginShape();
+  for (float a = 0; a < TWO_PI; a += angle) {
+    float sx = x + cos(a) * radius;
+    float sy = y + sin(a) * radius;
+    vertex(sx, sy);
+    sx = x + cos(a+halfAngle) * radius/2;
+    sy = y + sin(a+halfAngle) * radius/2;
+    vertex(sx, sy);
+  }
+  endShape(CLOSE);
+}
+
+void snow(){
+  strokeWeight(4);
+  line(-10, 0, 10, 0);
+  rotate(radians(60));
+  line(-10, 0, 10, 0);
+  rotate(radians(60));
+  line(-10, 0, 10, 0);
 }
