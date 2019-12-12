@@ -1,7 +1,7 @@
+import processing.opengl.*;
+
 color[] pallete = {#f64231, #f64231, #a8c8b9, #f64231, #a8c8b9};
-
 int sw = 4;
-
 int snow_num = 30;
 
 float[] snowX = new float[snow_num];
@@ -10,24 +10,24 @@ float[] snowXS = new float[snow_num];
 float[] snowYS = new float[snow_num];
 float[] snowS = new float[snow_num];
 
-
 void setup() {
-  //size(1280, 720, P3D);
-  fullScreen(P3D);
+  //size(640, 360, OPENGL);
+  //size(1280, 720, OPENGL);
+  fullScreen(OPENGL);
 
   colorMode(HSB, 360, 100, 100, 100);
-  // noLoop();
   rectMode(CENTER);
-  // frameRate(0.3);
+  frameRate(0.1);
 
-  setupSnow();
+  //setupSnow();
 }
 
 void draw() {
-  randomSeed(int(frameCount / 8 / (height / 9) / 4));
+  //randomSeed(int(frameCount / 8 / (height / 9) / 4));
   drawCells();
   // background(200);
-  drawSnow();
+  //drawSnow();
+  
 }
 
 
@@ -50,6 +50,7 @@ void drawSnow() {
     snowX[i] += snowXS[i];
     snowY[i] += snowYS[i];
     circle(snowX[i], snowY[i], snowS[i]);
+    
     if (snowY[i] > height+20 ) {
       snowX[i] = random(width);
       snowY[i] = -20;      
@@ -68,7 +69,8 @@ void drawSnow() {
 
 void drawCells() {
 
-  int step_num = 16;
+  //int step_num = 16;
+  int step_num = 32;
   float step = width / step_num;
 
   pushMatrix();
